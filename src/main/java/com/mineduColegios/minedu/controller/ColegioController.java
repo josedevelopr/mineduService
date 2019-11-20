@@ -1,5 +1,7 @@
 package com.mineduColegios.minedu.controller;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ public class ColegioController
     public Colegio listarId(@PathVariable("codModular")String codModular){
         return service.listarCodModular(codModular);
     }
-    @GetMapping(path = {"/colegios/validar/{codModular}"})
+    @GetMapping(path = {"/colegios/obtener/{codModular}"})
     public Colegio validarColegioCodModular(@PathVariable("codModular")String codModular){
         return service.listarCodModular(codModular);
     }
@@ -44,9 +46,30 @@ public class ColegioController
 		}
         else
         {
+        	String tokenSeguridad = generarTokenAutenticacion();
         	respuesta.setEstadoRespuestaServer("1");
-        	respuesta.setRespuestaServer(cole.getCorreoRepresentanteColegio());
+        	respuesta.setRespuestaServer(cole.getCorreoRepresentanteColegio()+"|"+tokenSeguridad);
         }
 		return respuesta;
+    }
+    
+    private String generarTokenAutenticacion()
+    {
+    	int tamanoToken = 6;
+    	StringBuilder generatedToken = new StringBuilder();
+        try
+        {
+            SecureRandom number = SecureRandom.getInstance("SHA1PRNG");
+            // Generate 20 integers 0..20
+            for (int i = 0; i < tamanoToken; i++) 
+            {
+                generatedToken.append(number.nextInt(9));
+            }
+        } 
+        catch (NoSuchAlgorithmException e) 
+        {
+            e.printStackTrace();
+        }
+        return generatedToken.toString();
     }
 }
