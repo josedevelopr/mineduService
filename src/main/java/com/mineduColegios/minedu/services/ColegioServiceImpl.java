@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.mineduColegios.minedu.entities.Colegio;
 import com.mineduColegios.minedu.repositories.ColegioRepositorio;
 
+
+
 @Service
 public class ColegioServiceImpl implements ColegioService 
 {
